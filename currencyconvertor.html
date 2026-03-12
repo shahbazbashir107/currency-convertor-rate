@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>🌍 full name currency · converter</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: url('https://images.pexels.com/photos/534216/pexels-photo-534216.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: brightness(0.7) blur(1px);
+    }
+
+    .converter-card {
+      max-width: 780px;
+      width: 100%;
+      background: rgba(10, 20, 30, 0.78);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border-radius: 48px 48px 40px 40px;
+      padding: 28px 24px 36px;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.25) inset;
+      border: 1px solid rgba(255, 240, 150, 0.3);
+      color: white;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffecb0, #ffd966, #fff5cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .subhead {
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1rem;
+      color: #e0e0c0;
+      border-bottom: 1px dashed rgba(255, 215, 0, 0.4);
+      padding-bottom: 12px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    .amount-section {
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 100px;
+      padding: 8px 20px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(255, 200, 100, 0.4);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .amount-section label {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #fff2cd;
+      margin-right: 15px;
+    }
+
+    #amount {
+      flex: 2;
+      min-width: 200px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      padding: 16px 18px;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #ffffff;
+      outline: 2px solid transparent;
+      transition: 0.2s;
+    }
+
+    #amount:focus {
+      outline: 2px solid #f5b342;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .currency-panel {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 30px;
+      justify-content: space-between;
+    }
+
+    .currency-box {
+      flex: 1 1 260px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 32px;
+      padding: 18px 18px 16px;
+      backdrop-filter: blur(5px);
+      border: 1px solid #f1cf7a50;
+    }
+
+    .box-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ffe2a4;
+      margin-bottom: 10px;
+      margin-left: 8px;
+    }
+
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #1e2a33;
+      border-radius: 50px;
+      padding: 0 12px;
+      margin-bottom: 12px;
+      border: 1px solid #b9904b;
+    }
+
+    .search-wrapper i {
+      color: #f5c45e;
+      font-size: 1rem;
+      margin-right: 6px;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 0;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-wrapper input::placeholder {
+      color: #ad9f7f;
+      font-style: italic;
+    }
+
+    /* stylish select with country + currency full name */
+    .currency-dropdown {
+      width: 100%;
+      background: #17212b;
+      border: 1px solid #c9a451;
+      border-radius: 40px;
+      padding: 14px 20px;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #faeac6;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f5c542' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      background-size: 18px;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .currency-dropdown option {
+      background: #1e2a35;
+      color: #f0e2c5;
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    .switch-btn-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 50px;
+    }
+
+    #swap {
+      background: #e9b13f;
+      border: none;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #1b2229;
+      font-weight: bold;
+      box-shadow: 0 6px 0 #7f531e, 0 10px 18px black;
+      transition: 0.12s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #swap:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #7f531e, 0 5px 12px black;
+    }
+
+    .result-area {
+      background: #04121ee0;
+      border-radius: 80px;
+      padding: 18px 28px;
+      margin: 24px 0 18px;
+      text-align: center;
+      border: 1px solid #f8d98c;
+      box-shadow: 0 5px 0 #5c421e;
+    }
+
+    #result {
+      font-size: 2.1rem;
+      font-weight: 700;
+      word-break: break-word;
+      color: #fff3d1;
+      text-shadow: 0 3px 5px #00000070;
+    }
+
+    .convert-btn {
+      background: linear-gradient(145deg, #f3c45a, #d9a73a);
+      border: none;
+      width: 100%;
+      padding: 20px 20px;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #17212b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 9px 0 #7f581b, 0 10px 30px black;
+      transition: 0.07s linear;
+      margin-top: 12px;
+      border: 1px solid #ffea9e;
+    }
+
+    .convert-btn:active {
+      transform: translateY(7px);
+      box-shadow: 0 2px 0 #7f581b, 0 5px 20px black;
+    }
+
+    .footer {
+      margin-top: 22px;
+      font-size: 0.8rem;
+      color: #c4b386;
+      text-align: center;
+      border-top: 1px solid #ab8b4b60;
+      padding-top: 15px;
+    }
+
+    .footer code {
+      background: #010a13;
+      padding: 2px 8px;
+      border-radius: 80px;
+    }
+
+    @media (max-width: 500px) {
+      .converter-card {
+        padding: 18px 16px;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      .currency-panel {
+        flex-direction: column;
+      }
+
+      #swap {
+        width: 70px;
+        height: 70px;
+      }
+
+      #result {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="converter-card">
+    <h1>💱 fullname currency</h1>
+    <div class="subhead"><i>country · currency · real names</i></div>
+
+    <div class="amount-section">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" min="0.01" step="any" value="1.00" placeholder="0.00">
+    </div>
+
+    <div class="currency-panel">
+      <!-- FROM box -->
+      <div class="currency-box">
+        <div class="box-label">🇺🇳 FROM</div>
+        <div class="search-wrapper">
+          <i>🔍</i>
+          <input type="text" id="searchFrom" placeholder="search country or code...">
+        </div>
+        <select id="fromCurrency" class="currency-dropdown" size="1"></select>
+      </div>
+
+      <div class="switch-btn-container">
+        <button id="swap" title="swap currencies">⇄</button>
+      </div>
+
+      <!-- TO box -->
+      <div class="currency-box">
+        <div class="box-label">🌍 TO</div>
+        <div class="search-wrapper">
+          <i>🔍</i>
+          <input type="text" id="searchTo" placeholder="search country or code...">
+        </div>
+        <select id="toCurrency" class="currency-dropdown" size="1"></select>
+      </div>
+    </div>
+
+    <div class="result-area">
+      <div id="result">1.00 USD = 0.92 EUR</div>
+    </div>
+
+    <button class="convert-btn" id="convertBtn"> 🔄 CONVERT</button>
+    <div class="footer">
+      📍 <strong>exchangerate.host</strong> · key <code>2a1039...24ad</code> · full names included
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const API_KEY = '2a103910a3a329ae0be067500bac24ad';
+      const BASE_URL = 'https://api.exchangerate.host/live';
+
+      // ---------- ENRICHED CURRENCY LIST with country + currency full name (ISO codes + manual) ----------
+      const currencyFullNames = new Map([
+        ['USD', 'US Dollar · United States'],
+        ['EUR', 'Euro · European Union'],
+        ['GBP', 'Pound Sterling · United Kingdom'],
+        ['JPY', 'Japanese Yen · Japan'],
+        ['CHF', 'Swiss Franc · Switzerland'],
+        ['CAD', 'Canadian Dollar · Canada'],
+        ['AUD', 'Australian Dollar · Australia'],
+        ['NZD', 'New Zealand Dollar · New Zealand'],
+        ['CNY', 'Chinese Yuan · China'],
+        ['INR', 'Indian Rupee · India'],
+        ['BRL', 'Brazilian Real · Brazil'],
+        ['ZAR', 'South African Rand · South Africa'],
+        ['RUB', 'Russian Ruble · Russia'],
+        ['MXN', 'Mexican Peso · Mexico'],
+        ['SGD', 'Singapore Dollar · Singapore'],
+        ['HKD', 'Hong Kong Dollar · Hong Kong'],
+        ['TRY', 'Turkish Lira · Turkey'],
+        ['NOK', 'Norwegian Krone · Norway'],
+        ['SEK', 'Swedish Krona · Sweden'],
+        ['PLN', 'Polish Złoty · Poland'],
+        ['THB', 'Thai Baht · Thailand'],
+        ['KRW', 'South Korean Won · South Korea'],
+        ['AED', 'UAE Dirham · UAE'],
+        ['SAR', 'Saudi Riyal · Saudi Arabia'],
+        ['DKK', 'Danish Krone · Denmark'],
+        ['MYR', 'Malaysian Ringgit · Malaysia'],
+        ['IDR', 'Indonesian Rupiah · Indonesia'],
+        ['PHP', 'Philippine Peso · Philippines'],
+        ['ILS', 'Israeli Shekel · Israel'],
+        ['CLP', 'Chilean Peso · Chile'],
+        ['PKR', 'Pakistani Rupee · Pakistan'],
+        ['EGP', 'Egyptian Pound · Egypt'],
+        ['VND', 'Vietnamese Đồng · Vietnam'],
+        ['BDT', 'Bangladeshi Taka · Bangladesh'],
+        ['NGN', 'Nigerian Naira · Nigeria'],
+        ['KES', 'Kenyan Shilling · Kenya'],
+        ['GHS', 'Ghanaian Cedi · Ghana'],
+        ['UAH', 'Ukrainian Hryvnia · Ukraine'],
+        ['CZK', 'Czech Koruna · Czechia'],
+        ['HUF', 'Hungarian Forint · Hungary'],
+        ['RON', 'Romanian Leu · Romania'],
+        ['BGN', 'Bulgarian Lev · Bulgaria'],
+        ['ISK', 'Icelandic Króna · Iceland'],
+        ['HRK', 'Croatian Kuna · Croatia'],
+        ['RSD', 'Serbian Dinar · Serbia'],
+        ['MAD', 'Moroccan Dirham · Morocco'],
+        ['JOD', 'Jordanian Dinar · Jordan'],
+        ['OMR', 'Omani Rial · Oman'],
+        ['KWD', 'Kuwaiti Dinar · Kuwait'],
+        ['BHD', 'Bahraini Dinar · Bahrain'],
+        ['LKR', 'Sri Lankan Rupee · Sri Lanka'],
+        ['NPR', 'Nepalese Rupee · Nepal'],
+        ['MMK', 'Myanmar Kyat · Myanmar'],
+        ['LAK', 'Lao Kip · Laos'],
+        ['KHR', 'Cambodian Riel · Cambodia'],
+        ['MOP', 'Macanese Pataca · Macao'],
+        ['TWD', 'Taiwan Dollar · Taiwan'],
+        ['AFN', 'Afghan Afghani · Afghanistan'],
+        ['IRR', 'Iranian Rial · Iran'],
+        ['IQD', 'Iraqi Dinar · Iraq'],
+        ['LYD', 'Libyan Dinar · Libya'],
+        ['DZD', 'Algerian Dinar · Algeria'],
+        ['TND', 'Tunisian Dinar · Tunisia'],
+        ['SDG', 'Sudanese Pound · Sudan'],
+        ['AOA', 'Angolan Kwanza · Angola'],
+        ['XOF', 'West African CFA · BCEAO'],
+        ['XAF', 'Central African CFA · BEAC'],
+        ['XPF', 'CFP Franc · French Pacific'],
+      ]);
+
+      // ---------- DOM elements ----------
+      const amountInput = document.getElementById('amount');
+      const fromSelect = document.getElementById('fromCurrency');
+      const toSelect = document.getElementById('toCurrency');
+      const searchFrom = document.getElementById('searchFrom');
+      const searchTo = document.getElementById('searchTo');
+      const swapBtn = document.getElementById('swap');
+      const convertBtn = document.getElementById('convertBtn');
+      const resultDiv = document.getElementById('result');
+
+      // ---------- GLOBAL DATA ----------
+      let ratesMap = new Map();            // code -> rate (against USD)
+      let currencyCodes = [];              // sorted array of codes (e.g. ['USD','EUR',...])
+
+      // ---------- helper: build display name for dropdown option ----------
+      function getDisplayName(code) {
+        if (currencyFullNames.has(code)) {
+          return `${code} – ${currencyFullNames.get(code)}`;
+        } else {
+          // fallback for any extra code from API without full name
+          return `${code} – ${code}`;
+        }
+      }
+
+      // ---------- render both dropdowns with full names ----------
+      function populateDropdowns(codes) {
+        const optionsHtml = codes.map(code => {
+          const display = getDisplayName(code);
+          return `<option value="${code}">${display}</option>`;
+        }).join('');
+        fromSelect.innerHTML = optionsHtml;
+        toSelect.innerHTML = optionsHtml;
+      }
+
+      // ---------- filter dropdown based on search input (searches in full name + code) ----------
+      function filterDropdown(searchInput, selectElement) {
+        const term = searchInput.value.trim().toUpperCase();
+        if (term === '') {
+          // restore all options
+          selectElement.innerHTML = currencyCodes.map(code => {
+            const display = getDisplayName(code);
+            return `<option value="${code}">${display}</option>`;
+          }).join('');
+          return;
+        }
+
+        const filtered = currencyCodes.filter(code => {
+          const fullDisplay = getDisplayName(code).toUpperCase();
+          return code.includes(term) || fullDisplay.includes(term);
+        });
+
+        if (filtered.length === 0) {
+          selectElement.innerHTML = '<option value="" disabled>❌ no match</option>';
+        } else {
+          selectElement.innerHTML = filtered.map(code => {
+            const display = getDisplayName(code);
+            return `<option value="${code}">${display}</option>`;
+          }).join('');
+        }
+      }
+
+      // ---------- set default selection USD / EUR ----------
+      function setDefaultSelections() {
+        if (currencyCodes.includes('USD')) fromSelect.value = 'USD';
+        else fromSelect.value = currencyCodes[0] || 'USD';
+
+        if (currencyCodes.includes('EUR')) toSelect.value = 'EUR';
+        else toSelect.value = currencyCodes[1] || (currencyCodes[0] !== 'USD' ? currencyCodes[0] : 'EUR');
+
+        performConversion();
+      }
+
+      // ---------- conversion ----------
+      function performConversion() {
+        const amount = parseFloat(amountInput.value) || 0;
+        if (amount <= 0) {
+          resultDiv.innerText = '➡️ enter positive amount';
+          return;
+        }
+
+        const fromCode = fromSelect.value;
+        const toCode = toSelect.value;
+        if (!fromCode || !toCode || !ratesMap.has(fromCode) || !ratesMap.has(toCode)) {
+          resultDiv.innerText = '⏳ select valid currencies';
+          return;
+        }
+
+        const rateFrom = ratesMap.get(fromCode);  // USD base: how many per 1 USD
+        const rateTo = ratesMap.get(toCode);
+        const result = amount * (rateTo / rateFrom);
+        const formatted = result.toFixed(4).replace(/\.0+$/, '');
+        resultDiv.innerText = `${amount} ${fromCode} = ${formatted} ${toCode}`;
+      }
+
+      // ---------- fetch live rates ----------
+      async function fetchRates() {
+        try {
+          const url = `${BASE_URL}?access_key=${API_KEY}`;
+          const resp = await fetch(url);
+          const data = await resp.json();
+
+          if (!data.success || !data.quotes || data.source !== 'USD') {
+            useFallbackRates();
+            return;
+          }
+
+          const quotes = data.quotes;  // e.g. { USDUSD:1, USDEUR:0.92 ... }
+          const codesSet = new Set();
+
+          for (let key in quotes) {
+            if (key.startsWith('USD')) {
+              const code = key.substring(3);
+              if (code && code.length === 3) codesSet.add(code);
+            }
+          }
+          codesSet.add('USD'); // ensure USD is included
+
+          currencyCodes = Array.from(codesSet).sort();
+
+          // fill ratesMap
+          ratesMap.clear();
+          ratesMap.set('USD', 1.0);
+          for (let code of currencyCodes) {
+            if (code === 'USD') continue;
+            const key = `USD${code}`;
+            if (quotes[key] !== undefined) {
+              ratesMap.set(code, quotes[key]);
+            } else {
+              // edge case: keep but fallback rate 1.0 (shouldn't happen)
+              ratesMap.set(code, 1.0);
+            }
+          }
+
+          populateDropdowns(currencyCodes);
+          setDefaultSelections();
+        } catch (err) {
+          console.warn('API fetch failed, using fallback + full names');
+          useFallbackRates();
+        }
+      }
+
+      // ---------- fallback rates (still with full names) ----------
+      function useFallbackRates() {
+        // use a reasonable subset from the fullNames map
+        const fallbackList = Array.from(currencyFullNames.keys()).filter(c => c.length === 3);
+        currencyCodes = fallbackList.sort();
+
+        // typical USD rates
+        const fallbackRates = {
+          'USD': 1.00, 'EUR': 0.92, 'GBP': 0.78, 'JPY': 148.5, 'CHF': 0.88, 'CAD': 1.36,
+          'AUD': 1.52, 'NZD': 1.65, 'CNY': 7.20, 'INR': 83.10, 'BRL': 5.05, 'ZAR': 18.90,
+          'RUB': 91.5, 'MXN': 16.90, 'SGD': 1.34, 'HKD': 7.82, 'TRY': 32.20, 'NOK': 10.60,
+          'SEK': 10.40, 'PLN': 4.02, 'THB': 35.80, 'KRW': 1335.0, 'AED': 3.67, 'SAR': 3.75,
+          'DKK': 6.95, 'MYR': 4.72, 'IDR': 15650, 'PHP': 55.8, 'ILS': 3.68, 'CLP': 925,
+          'PKR': 278.5, 'EGP': 47.3, 'VND': 25450, 'BDT': 117.5, 'NGN': 1480, 'KES': 142,
+          'GHS': 14.2, 'UAH': 39.2, 'CZK': 23.2, 'HUF': 360.5, 'RON': 4.62, 'BGN': 1.81,
+          'ISK': 138.5, 'HRK': 7.02, 'RSD': 108.5, 'MAD': 10.09, 'JOD': 0.709, 'OMR': 0.385,
+          'KWD': 0.308, 'BHD': 0.376, 'LKR': 305, 'NPR': 133.2, 'MMK': 2100, 'LAK': 21000,
+          'KHR': 4100, 'MOP': 8.06, 'TWD': 32.5, 'AFN': 72.5, 'IRR': 42100, 'IQD': 1310,
+          'LYD': 4.85, 'DZD': 134.5, 'TND': 3.15, 'SDG': 601, 'AOA': 915, 'XOF': 606.5,
+          'XAF': 606.5, 'XPF': 110.2
+        };
+
+        ratesMap.clear();
+        currencyCodes.forEach(code => {
+          if (fallbackRates[code] !== undefined) ratesMap.set(code, fallbackRates[code]);
+          else ratesMap.set(code, 1.0); // fallback 1.0 for any missing
+        });
+
+        populateDropdowns(currencyCodes);
+        setDefaultSelections();
+      }
+
+      // ---------- attach event listeners ----------
+      searchFrom.addEventListener('input', () => filterDropdown(searchFrom, fromSelect));
+      searchTo.addEventListener('input', () => filterDropdown(searchTo, toSelect));
+
+      // blur: reset to full list if empty
+      searchFrom.addEventListener('blur', () => {
+        if (searchFrom.value.trim() === '') {
+          fromSelect.innerHTML = currencyCodes.map(c => {
+            const display = getDisplayName(c);
+            return `<option value="${c}">${display}</option>`;
+          }).join('');
+        }
+      });
+      searchTo.addEventListener('blur', () => {
+        if (searchTo.value.trim() === '') {
+          toSelect.innerHTML = currencyCodes.map(c => {
+            const display = getDisplayName(c);
+            return `<option value="${c}">${display}</option>`;
+          }).join('');
+        }
+      });
+
+      swapBtn.addEventListener('click', () => {
+        const fromVal = fromSelect.value;
+        const toVal = toSelect.value;
+        if (fromVal && toVal) {
+          fromSelect.value = toVal;
+          toSelect.value = fromVal;
+          performConversion();
+        } else {
+          setDefaultSelections();
+        }
+      });
+
+      convertBtn.addEventListener('click', performConversion);
+
+      amountInput.addEventListener('input', () => {
+        clearTimeout(window.amtTimeout);
+        window.amtTimeout = setTimeout(performConversion, 400);
+      });
+
+      fromSelect.addEventListener('change', performConversion);
+      toSelect.addEventListener('change', performConversion);
+
+      // ---------- start ----------
+      fetchRates();
+    })();
+  </script>
+</body>
+
+</html>
